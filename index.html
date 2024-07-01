@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Chatbot</title>
+</head>
+<body>
+    <h1>Welcome to the AI Chatbot</h1>
+    <form id="chatForm">
+        <input type="text" id="userInput" placeholder="Type your message here">
+        <button type="submit">Send</button>
+    </form>
+    <div id="chatOutput"></div>
+
+    <script>
+        document.getElementById('chatForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var userInput = document.getElementById('userInput').value;
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({message: userInput})
+            })
+            .then(response => response.json())
+            .then(data => {
+                var chatOutput = document.getElementById('chatOutput');
+                chatOutput.innerHTML += '<p><strong>You:</strong> ' + userInput + '</p>';
+                chatOutput.innerHTML += '<p><strong>Chatbot:</strong> ' + data.response + '</p>';
+                document.getElementById('userInput').value = '';
+            });
+        });
+    </script>
+</body>
+</html>
